@@ -44,7 +44,7 @@ export default function RootLayout({
                     </div>
 
                     <Button variant={"ghost"} asChild className="w-full justify-start">
-                        <Link href={""}>
+                        <Link href={"/dashboard/category"}>
                             <Layers3 className="mr-2 w-4 h4"/>
                             Kategori
                         </Link>
@@ -67,9 +67,11 @@ export default function RootLayout({
                 </div>
 
                 <ButtonLogout/>
-            </section>   
+            </section>  
+            <section className="grow mr-5 mt-5 h-[87vh] overflow-y-auto">
+              {children}
+            </section> 
         </section>
-        {children}
       </body>
     </html>
   );
