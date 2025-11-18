@@ -3,7 +3,7 @@ export interface Meta{
     message:string;
 }
 
-export interface ApiResposne<T>{
+export interface ApiResponse<T>{
     data:T;
     meta:Meta;
 }
