@@ -52,7 +52,7 @@ export default function RootLayout({
 
 
                     <Button variant={"ghost"} asChild className="w-full justify-start">
-                        <Link href={""}>
+                        <Link href={"/dashboard/content"}>
                             <BookOpen className="mr-2 w-4 h4"/>
                             Konten
                         </Link>
