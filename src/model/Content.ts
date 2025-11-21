@@ -1,26 +1,24 @@
 export interface Content{
-    ID:number;
+    id:number;
     title:string;
     description:string;
     excerpt:string;
-    images:string;
+    image:string;
     tags:string[];
     created_at:string;
     author:string;
     created_by_name:string;
     created_by_id:number;
     category_id:number;    
+    status:string;
 }
 
 export interface ContentRequest{
     title:string;
     description:string;
     excerpt:string;
-    images:string;
-    tags:string[];
-    created_at:string;
-    author:string;
-    created_by_name:string;
-    created_by_id:number;
+    image:string;
+    tags:string;
+    status:string;
     category_id:number;    
 }
