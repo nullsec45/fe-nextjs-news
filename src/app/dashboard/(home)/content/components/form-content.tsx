@@ -5,7 +5,7 @@ import { FC, useEffect, useState} from "react";
 import { setupInterceptor } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { contentFormSchema } from "../lib/validation";
-import { createContent,uploadImage } from "../lib/action";
+import { createContent,uploadImage,editContent } from "../lib/action";
 import Swal from "sweetalert2";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -65,9 +65,15 @@ const FormContentPage:FC<FormContentProps> = ({type, defaultValues, categoryList
             setCategories(categoryList);
         }
 
-        // if (type == "EDIT" && defaultValues){
-        //     setTitle(defaultValues.title);
-        // }
+        if (type == "EDIT" && defaultValues){
+            setTitle(defaultValues.title);
+            setExcerpt(defaultValues.excerpt);
+            setDescription(defaultValues.description);
+            setCategoryId(defaultValues.category_id.toString());
+            setTags(defaultValues.tags.toString());
+            setStatus(defaultValues.status);
+            setPreviewImage(defaultValues.image);
+        }
     },[type,defaultValues, categoryList]);
 
     const handleContent=async(e:React.FormEvent) => {
@@ -113,6 +119,7 @@ const FormContentPage:FC<FormContentProps> = ({type, defaultValues, categoryList
                     tags,
                     status,
                 }); 
+
                 Swal.fire({
                     icon:'success',
                     title:'success',
@@ -122,38 +129,54 @@ const FormContentPage:FC<FormContentProps> = ({type, defaultValues, categoryList
                     timer:1500
                 });
             }
-            
-            // else{
-            //     if(defaultValues?.id){
-            //         await editContent({title}, defaultValues.id);
-            //         Swal.fire({
-            //             icon:'success',
-            //             title:'success',
-            //             text:'Konten berhasil diubah',
-            //             toast:true,
-            //             showConfirmButton:false,
-            //             timer:3000
-            //         });
-            //     }else {
-            //         Swal.fire({
-            //             icon:'error',
-            //             title:'Oops!',
-            //             text:'ID Konten tidak ada',
-            //             toast:true,
-            //             showConfirmButton:false,
-            //             timer:3000
-            //         });
 
-            //     }
-            // }
 
             let imageUrl;
 
-            if(!imageUrl) {
+            if(!image) {
                 imageUrl=previewImage;
             }else{
                 setIsUploading(true);
+                imageUrl = await uploadImage(image);
+                console.log(imageUrl)
             }
+            
+            
+            if(defaultValues?.id){
+                    await editContent({
+                        title,
+                        excerpt,
+                        description,
+                        image:imageUrl.data? imageUrl.data.urlimage : imageUrl,
+                        category_id:Number(categoryId),
+                        tags,
+                        status,
+                    }, defaultValues.id);
+                    
+                    Swal.fire({
+                        icon:'success',
+                        title:'success',
+                        text:'Konten berhasil diubah',
+                        toast:true,
+                        showConfirmButton:false,
+                        timer:3000
+                    });
+                }else {
+                    Swal.fire({
+                        icon:'error',
+                        title:'Oops!',
+                        text:'ID Konten tidak ada',
+                        toast:true,
+                        showConfirmButton:false,
+                        timer:3000
+                    });
+
+                    window.location.reload();
+
+                }
+
+          
+
 
             router.push("/dashboard/content");
            
@@ -248,7 +271,7 @@ const FormContentPage:FC<FormContentProps> = ({type, defaultValues, categoryList
                     <Label htmlFor="image">
                         Unggah Gambar
                     </Label>
-                    <Input type="file" name="image" id="image" accept="image/*" onChange={handleImageChange} required/>
+                    <Input type="file" name="image" id="image" accept="image/*" onChange={handleImageChange} required={type === "ADD"} />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="status">

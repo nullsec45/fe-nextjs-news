@@ -25,3 +25,21 @@ export const createContent=async(contentData:ContentRequest) => {
         throw error;
     }
 }
+
+export const editContent=async(contentData:ContentRequest, id:number) => {
+    try{
+        const response=await axiosInstance.put(`admin/contents/${id}`, contentData);
+        return response.data;
+    }catch(error){  
+        throw error;
+    }
+}
+
+export const deleteContent=async(id:number) => {
+    try{
+        const response=await axiosInstance.delete(`admin/contents/${id}`);
+        return response.data;
+    }catch(error){  
+        throw error;
+    }
+}

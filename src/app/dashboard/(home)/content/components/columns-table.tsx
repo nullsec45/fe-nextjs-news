@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Pencil } from "lucide-react";
+import DeleteContent from "./delete-content"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -52,6 +53,7 @@ export const columns: ColumnDef<Content>[] = [
                         Edit
                     </Link>
                 </Button>
+                 <DeleteContent id={content.id}/>
             </div>
         )
     }
