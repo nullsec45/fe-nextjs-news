@@ -14,6 +14,7 @@ import SubmitButtonForm from "../../components/submit-button-form";
 import { Select } from "@radix-ui/react-select";
 import { SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import axios from "axios";
 
 
 interface FormContentProps {
@@ -175,23 +176,43 @@ const FormContentPage:FC<FormContentProps> = ({type, defaultValues, categoryList
 
                 }
 
-          
-
-
             router.push("/dashboard/content");
            
-        }catch(error){
-            const errorMessage = error instanceof Error ? error.message : 'An unexpected error occured';
-            Swal.fire({
-                icon:'error',
-                title:'Oops!',
-                text:errorMessage,
-                toast:true,
-                showConfirmButton:false,
-                timer:1500
-            });
+        }catch(error:any){
+            if (axios.isAxiosError(error) && error.response) {
+                const status = error.response.status; // <= ini HTTP status (500)
+                const data = error.response.data as { status?: boolean; message?: string };
 
-            setError(error instanceof Error ? [error.message] : ['An unexpected error occured']);
+                const msg =
+                    data?.message ||
+                    (status === 500
+                    ? "Terjadi kesalahan pada server."
+                    : "Terjadi kesalahan.");
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops!",
+                    text: msg,
+                    toast: true,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+
+                setError([msg]); // state-mu tipe-nya string[]
+            } else {
+                const errorMessage = error instanceof Error ? error.message : 'An unexpected error occured';
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops!",
+                    text: errorMessage,
+                    toast: true,
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+
+                setError([errorMessage]);
+            }
         }finally{
             setIsUploading(false);
         }
