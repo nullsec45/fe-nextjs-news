@@ -59,9 +59,9 @@ export default function RootLayout({
                     </Button>
 
                     <Button variant={"ghost"} asChild className="w-full justify-start">
-                        <Link href={""}>
+                        <Link href={"/dashboard/user"}>
                             <User className="mr-2 w-4 h4"/>
-                            Pengguna
+                            Profile
                         </Link>
                     </Button>
                 </div>
