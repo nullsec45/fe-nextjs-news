@@ -10,6 +10,7 @@ export interface Content{
     created_by_name:string;
     created_by_id:number;
     category_id:number;    
+    category_name:string;
     status:string;
 }
 
