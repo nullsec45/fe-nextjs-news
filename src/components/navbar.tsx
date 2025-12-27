@@ -11,7 +11,7 @@ import Image from "next/image";
 import { MenuButton, MenuItem, MenuItems, Menu as MenuList } from "@headlessui/react";
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "./ui/button";
-import { X, Menu } from "lucide-react";
+import { X, Menu, LogIn, UserPlus } from "lucide-react";
 
 export default function Navbar(){
     const [menuOpen, setMenuOpen]=useState(false);
@@ -63,7 +63,7 @@ export default function Navbar(){
     return (
         <div className="container px-8 mx-auto xl:px-5 max-w-screen-lg py-5 lg:py-8">
             <nav>
-                <div className="flex flex-wrap justify-between md:flex-nowrap md:gap-10">
+                <div className="flex flex-wrap  justify-between md:flex-nowrap md:gap-10">
                     <div className="order-1 hidden w-full flex-col items-center justify-start md:order-none md:flex md:w-auto md:flex-row md:justify-start">
                         <Link href={"/"} className="w-28">
                             <Image alt="logo" src={"/img/news-logo.png"} width={132} height={52} />
@@ -88,11 +88,23 @@ export default function Navbar(){
                                 </div>
                             </MenuItems>
                         </MenuList>
+                      
                     </div>
                     <div className="flex w-full items-center justify-between md:w-auto">
                          <Link href={"/"} className="md:hidden w-28">
                             <Image alt="logo" src={"/img/news-logo.png"} width={132} height={52} />
                          </Link>
+                        <div className="hidden md:flex items-center gap-4">
+                            <Link href={"/login"} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-500 transition-colors ml-auto">
+                                <LogIn className="w-4 h-4" /> 
+                                <span>Sign In</span>
+                            </Link>
+                            
+                            <Link href={"/register"} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+                                <UserPlus className="w-4 h-4" />
+                                <span>Sign Up</span>
+                            </Link>
+                        </div>
 
                          <Button onClick={() => setMenuOpen(!menuOpen)} 
                                  className="ml-auto bg-transparent rounded-md px-2 py-1 text-gray-500 focus:bg-transparent focus:text-blue-500 focus:outline-none md:hidden">
@@ -114,6 +126,7 @@ export default function Navbar(){
                             ))}
                         </div>
                     )}
+                    
                 </div>
             </nav>
         </div>
