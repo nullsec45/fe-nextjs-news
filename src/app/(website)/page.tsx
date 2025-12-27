@@ -113,7 +113,7 @@ export default function Home() {
         </div>
         <div className="mt-10 grid gap:10 md:grid-cols-2 lg:gap-10 xl:grid-cols-3">
           {contents.map((content) => (
-            <div className="group cursor-pointer">
+            <div key={content.id} className="group cursor-pointer">
               <div className="overflow-hidden rounded-md bg-ray-100 transition-all hover:scale-105 ">
                 <Link className="relative block aspect-ration" href={""}>
                   {content.image != "" && (
