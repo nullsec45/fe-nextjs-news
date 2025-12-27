@@ -17,11 +17,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className="antialiased text0=-gray-800">
-        <Navbar />
-        <main className="container px-8 mx-auto xl:px-5 max-w-screen-lg py-5 lg:py-8">
+        {/* <Navbar /> */}
+        {/* <main className=" px-8 mx-auto xl:px-5  py-5 lg:py-8"> */}
         {children}
-        </main>
-        <Footer/>
+        {/* </main> */}
+        {/* <Footer/> */}
       </body>
     </html>
   );
