@@ -3,14 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui/label"; // Import Label
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { formSchema } from "./validation";
 import axiosInstance from "@/lib/axios";
 import { setCookie } from 'cookies-next';
-import Link from "next/link";
 import axios from "axios";
+import Link from "next/link";
+
 
 const SubmitButton = () => {
     const { pending } = useFormStatus();
@@ -22,21 +23,30 @@ const SubmitButton = () => {
     )
 }
 
-const FormSignIn = () => {
+const FormSignUp = () => {
     const router = useRouter();
 
+    // Fix: Menambahkan state untuk name
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmationPassword, setConfirmationPassword] = useState('')
     const [error, setError] = useState<string[]>([]);
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setError([]);
 
         const validation = formSchema.safeParse({
+            name, 
             email,
             password,
-        })
+            confirmation_password:confirmationPassword
+        });
+
+        console.log(password);
+        console.log(confirmationPassword);
+        
 
         if (!validation.success) {
             const errorMessage = validation.error.issues.map((issue) => issue.message)
@@ -44,11 +54,10 @@ const FormSignIn = () => {
             return;
         }
 
-        await axiosInstance.post('auth/login', { email, password })
+        await axiosInstance.post('/auth/register', { name, email, password, confirm_password:confirmationPassword })
             .then((response) => {
-                setCookie('accessToken', response.data.access_token)
-                router.push('/dashboard');
-            }).catch((error) => {
+                router.push('/login');
+            }).catch((error:any) => {
                 if (axios.isAxiosError(error) && error.response) {
                     const status = error.response.status; // <= ini HTTP status (500)
                     const data = error.response.data as { status?: boolean; message?: string };
@@ -67,11 +76,11 @@ const FormSignIn = () => {
     }
 
     return (
-        <div className="w-full h-screen flex items-center justify-center">
-            <div className="w-full sm:max-w-lg px-6 py-12 bg-white shadow-md rounded-lg">
+        <div className="w-full h-screen flex items-center justify-center ">
+            <div className="w-full sm:max-w-lg px-6 py-12 bg-white shadow-md rounded-lg"> 
                 <div className="sm:mx-auto sm:w-full">
                     <h2 className="mt-2 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Sign In
+                        Sign Up
                     </h2>
                 </div>
 
@@ -87,8 +96,20 @@ const FormSignIn = () => {
                 )}
 
                 <div className="mt-10 sm:mx-auto sm:w-full">
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={handleRegister} className="space-y-6">
                         
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="name">Full Name</Label>
+                            <Input 
+                                id="name"
+                                type="text" 
+                                onChange={(e) => setName(e.target.value)} 
+                                placeholder="Enter your full name" 
+                                name="name" 
+                                required 
+                            />
+                        </div>
+
                         <div className="grid w-full items-center gap-1.5">
                             <Label htmlFor="email">Email Address</Label>
                             <Input 
@@ -97,7 +118,7 @@ const FormSignIn = () => {
                                 onChange={(e) => setEmail(e.target.value)} 
                                 placeholder="Enter your email" 
                                 name="email" 
-                                required
+                                required 
                             />
                         </div>
 
@@ -106,14 +127,27 @@ const FormSignIn = () => {
                             <Input 
                                 id="password"
                                 type="password" 
-                                onChange={(e) => setPassword(e.target.value)}  
+                                onChange={(e) => setPassword(e.target.value)} 
                                 placeholder="******" 
                                 name="password" 
-                                required
+                                required 
                             />
                         </div>
+
+                        <div className="grid w-full items-center gap-1.5">
+                            <Label htmlFor="confirmation_password">Konfirmasi Password</Label>
+                            <Input 
+                                id="confirmation_password"
+                                type="password" 
+                                onChange={(e) => setConfirmationPassword(e.target.value)} 
+                                placeholder="******" 
+                                name="confirmation_password" 
+                                required 
+                            />
+                        </div>
+
                         <span className="text-sm text-gray-600">
-                            Belum punya akun ?  <Link href={"/register"} className="font-semibold text-blue-600 hover:text-blue-500 hover:underline transition-colors duration-200"> Register</Link>
+                            Sudah punya akun ?  <Link href={"/login"} className="font-semibold text-blue-600 hover:text-blue-500 hover:underline transition-colors duration-200"> Login</Link>
                         </span>
                         <SubmitButton />
                     </form>
@@ -123,4 +157,4 @@ const FormSignIn = () => {
     )
 }
 
-export default FormSignIn
+export default FormSignUp
